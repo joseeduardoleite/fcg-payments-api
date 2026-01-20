@@ -10,6 +10,8 @@ public class ContaMap : IEntityTypeConfiguration<Conta>
 {
     public void Configure(EntityTypeBuilder<Conta> builder)
     {
+        builder.HasKey(c => c.UsuarioId);
+
         builder.Property(c => c.UsuarioId)
             .IsRequired();
 

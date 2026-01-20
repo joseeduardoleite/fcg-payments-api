@@ -3,6 +3,7 @@ using Asp.Versioning.ApiExplorer;
 using FiapCloudGames.Payments.Api;
 using FiapCloudGames.Payments.Api.Extensions;
 using FiapCloudGames.Payments.Api.Utils;
+using FiapCloudGames.Payments.Infrastructure;
 using FiapCloudGames.Payments.Infrastructure.Data;
 using FiapCloudGames.Payments.Infrastructure.Messaging;
 using MassTransit;
@@ -13,13 +14,11 @@ using Swashbuckle.AspNetCore.Filters;
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddApiModule();
-//builder.Services.AddApplicationModule();
-//builder.Services.AddInfraModule(builder.Configuration);
+builder.Services.AddInfraModule(builder.Configuration);
 
 builder.Services.AddAuthorization();
 
 builder.Services.AddControllers();
-//builder.Services.AddValidatorsFromAssemblyContaining<JogoValidator>();
 
 builder.Services.AddEndpointsApiExplorer();
 
@@ -89,11 +88,6 @@ builder.Services.AddMassTransit(x =>
             h.Password(builder.Configuration["RabbitMQ:Password"]!);
         });
 
-        /*cfg.ReceiveEndpoint("order-placed-queue", e =>
-        {
-            e.ConfigureConsumer<OrderPlacedEventConsumer>(context);
-        });*/
-
         cfg.ConfigureEndpoints(context);
     });
 });
@@ -101,6 +95,12 @@ builder.Services.AddMassTransit(x =>
 builder.Services.AddHealthChecks();
 
 WebApplication app = builder.Build();
+
+using (IServiceScope scope = app.Services.CreateScope())
+{
+    AppDbContext db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await db.Database.MigrateAsync();
+}
 
 if (app.Environment.IsDevelopment())
 {

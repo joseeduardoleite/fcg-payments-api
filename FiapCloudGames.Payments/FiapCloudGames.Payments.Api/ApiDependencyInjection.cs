@@ -7,8 +7,6 @@ public static class ApiDependencyInjection
 {
     public static IServiceCollection AddApiModule(this IServiceCollection services)
     {
-        //services.AddScoped<I>
-
         return services;
     }
 }

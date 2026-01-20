@@ -1,6 +1,6 @@
-﻿using FiapCloudGames.Payments.Domain.Entities;
+﻿using FiapCloudGames.Contracts.Events;
+using FiapCloudGames.Payments.Domain.Entities;
 using FiapCloudGames.Payments.Domain.Enums;
-using FiapCloudGames.Payments.Domain.Events;
 using FiapCloudGames.Payments.Infrastructure.Data;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;

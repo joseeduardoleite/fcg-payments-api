@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace FiapCloudGames.Payments.Domain.Events;
+namespace FiapCloudGames.Contracts.Events;
 
 [ExcludeFromCodeCoverage]
 public sealed class PaymentRejectedEvent

@@ -88,6 +88,16 @@ builder.Services.AddMassTransit(x =>
             h.Password(builder.Configuration["RabbitMQ:Password"]!);
         });
 
+        cfg.UseMessageRetry(r =>
+        {
+            r.Exponential(
+                retryLimit: 5,
+                minInterval: TimeSpan.FromSeconds(1),
+                maxInterval: TimeSpan.FromSeconds(5),
+                intervalDelta: TimeSpan.FromSeconds(1)
+            );
+        });
+
         cfg.ConfigureEndpoints(context);
     });
 });

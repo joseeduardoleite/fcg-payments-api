@@ -98,7 +98,15 @@ builder.Services.AddMassTransit(x =>
             );
         });
 
-        cfg.ConfigureEndpoints(context);
+        cfg.ReceiveEndpoint("payments-usercreated-queue", e =>
+        {
+            e.ConfigureConsumer<UserCreatedEventConsumer>(context);
+        });
+
+        cfg.ReceiveEndpoint("payments-orderplaced-queue", e =>
+        {
+            e.ConfigureConsumer<OrderPlacedEventConsumer>(context);
+        });
     });
 });
 

@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payments-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payments-api
+  template:
+    metadata:
+      labels:
+        app: payments-api
+    spec:
+      containers:
+      - name: payments-api
+        image: fiap/payments-api:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 80
+        env:
+          - name: ASPNETCORE_ENVIRONMENT
+            valueFrom:
+              configMapKeyRef:
+                name: fcg-api-config
+                key: ASPNETCORE_ENVIRONMENT
+          - name: Jwt__Issuer
+            valueFrom:
+              configMapKeyRef:
+                name: fcg-api-config
+                key: JWT_ISSUER
+          - name: Jwt__Audience
+            valueFrom:
+              configMapKeyRef:
+                name: fcg-api-config
+                key: JWT_AUDIENCE
+          - name: RabbitMQ__Host
+            valueFrom:
+              configMapKeyRef:
+                name: fcg-api-config
+                key: RABBITMQ_HOST
+          - name: RabbitMQ__Username
+            valueFrom:
+              secretKeyRef:
+                name: fcg-api-secret
+                key: RABBITMQ_USER
+          - name: RabbitMQ__Password
+            valueFrom:
+              secretKeyRef:
+                name: fcg-api-secret
+                key: RABBITMQ_PASS
+          - name: Jwt__SecretKey
+            valueFrom:
+              secretKeyRef:
+                name: fcg-api-secret
+                key: JWT_SECRETKEY
